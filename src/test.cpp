@@ -1,12 +1,6 @@
-#include <iostream>
+#include "test.h"
 
-void Message()
+void YOUR_APP::Message(const char* msg)
 {
-	std::cout << "This worked\n";
-}
-
-
-int main()
-{
-    Message();
+    puts(msg);
 }
