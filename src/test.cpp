@@ -6,3 +6,7 @@ void Message()
 }
 
 
+int main()
+{
+    Message();
+}
