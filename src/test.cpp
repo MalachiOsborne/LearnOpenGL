@@ -1,6 +1,8 @@
 #include <iostream>
 
-void message()
+void Message()
 {
 	std::cout << "This worked\n";
 }
+
+
