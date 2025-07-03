@@ -1,21 +1,11 @@
 #include <cstdlib> //C standard lib, handy
 #include "glad/glad.h"
 #include "GLFW/glfw3.h"
-
-//tells OpenGL we resized
-void framebuffer_size_callback(GLFWwindow*, int width, int height)
-{
-    glViewport(0, 0, width, height);
-}
-
-void process_input(GLFWwindow* window)
-{
-    if(glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
-        glfwSetWindowShouldClose(window, true);
-}
+#include "functions.h"
 
 int main()
 {
+    
     //window instantiation
     glfwInit();
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
@@ -38,10 +28,13 @@ int main()
         return EXIT_FAILURE;
 
     //OpenGL playground
-//    glViewport(0, 0, 800, 600);
+    glViewport(0, 0, 800, 600);
 
     //resize callback function call
-//   glfwSetFramebufferSizeCallback(window, &framebuffer_size_callback);
+   glfwSetFramebufferSizeCallback(window, &framebuffer_size_callback);
+
+    vertex_shaders();
+    fragment_shaders();
 
     //render loop
     while(!glfwWindowShouldClose(window))
