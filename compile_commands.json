@@ -3,5 +3,11 @@
     "directory": "/home/malachi/LearnOpenGL",
     "command": "g++ -Ivendor/glad/include -Ivendor/glfw/include -Isrc -lGL -ldl -lpthread -lm -std=c++17 -Wall -Wextra -Wpedantic -O3 -o YOUR_APP",
     "file": "src/main.cpp"
+  },
+  {
+    "directory": "/home/malachi/LearnOpenGL",
+    "command": "g++ -Ivendor/glad/include -Ivendor/glfw/include -Isrc -lGL -ldl -lpthread -lm -std=c++17 -Wall -Wextra -Wpedantic -O3 -o YOUR_APP",
+    "file": "src/functions.cpp"
+
   }
 ]
