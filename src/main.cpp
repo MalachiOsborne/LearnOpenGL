@@ -4,6 +4,20 @@
 #include "functions.h"
 #include <iostream>
 
+//GLSL stuff
+const char* vertex_shader_source =    "#version 460 core\n"
+                                      "layout (location = 0) in vec3 a_pos;\n"
+                                      "void main()\n"
+                                      "{\n"
+                                      "    gl_Position = vec4(a_pos.x, a_pos.y, a_pos.z, 1.0f);\n"
+                                      "}\0";
+
+const char*  fragment_shader_source = "#version 460 core\n"
+                                      "out vec4 frag_color;\n"
+                                      "void main()\n"
+                                      "{\n"
+                                      "  frag_color = vec4(1.0f, 1.0f, 0.0f, 1.0f);\n"
+                                      "}\0";
 int main()
 {
     
@@ -43,29 +57,7 @@ int main()
 
     };
 
-
-    //VAO is vertex array object
-    //used to store VBO layout without having to rebind all the time
-    unsigned int VAO;
-    glGenVertexArrays(1, &VAO);
-
-    //VBO is vertex buffer object
-    //this is used for one attribute, i.e. color, position, orientation, etc...
-    unsigned int VBO;
-    glGenBuffers(1, &VBO);
-
-    glBindBuffer(GL_ARRAY_BUFFER, VBO);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
-
     //first step of the graphics pipeline
-
-    //GLSL stuff
-    const char* vertex_shader_source = "#version 460 core\n"
-                                       "layout (location = 0) in vec3 a_pos;\n"
-                                       "void main()\n"
-                                       "{\n"
-                                       "    gl_Position = vec4(a_pos.x, a_pos.y, a_pos.z, 1.0f);\n"
-                                       "}\0";
 
     unsigned int vertex_shader;
     vertex_shader = glCreateShader(GL_VERTEX_SHADER);
@@ -84,12 +76,6 @@ int main()
 
     //second step of the graphics pipeline
 
-    const char*  fragment_shader_source = "#version 460 core\n"
-                                          "out vec4 frag_color;\n"
-                                          "void main()\n"
-                                          "{\n"
-                                          "  frag_color = vec4(1.0f, 1.0f, 0.0f, 1.0f);\n"
-                                          "}\0";
     unsigned int fragment_shader;
     fragment_shader = glCreateShader(GL_FRAGMENT_SHADER);
     glShaderSource(fragment_shader, 1, &fragment_shader_source, NULL);
@@ -102,10 +88,6 @@ int main()
         std::cout << "ERROR::SHADER::FRAGMENT::COMPILATION_FAILED\n" << infolog << std::endl;
     }
 
-     
-    //array of verticies traversal
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0); 
-    glEnableVertexAttribArray(0);
 
     //third step of the graphics pipeline
 
@@ -125,7 +107,24 @@ int main()
         std::cout << "ERROR::SHADER::PROGRAM::COMPILATION_FAILED\n" << infolog << std::endl;
     }
 
+    //VAO is vertex array object
+    //used to store VBO layout without having to rebind all the time
+    unsigned int VAO;
+    glGenVertexArrays(1, &VAO);
 
+    //VBO is vertex buffer object
+    //this is used for one attribute, i.e. color, position, orientation, etc...
+    unsigned int VBO;
+    glGenBuffers(1, &VBO);
+
+    glBindVertexArray(VAO);
+    
+    glBindBuffer(GL_ARRAY_BUFFER, VBO);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+
+    //array of verticies traversal
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0); 
+    glEnableVertexAttribArray(0);
 
     //render loop
     while(!glfwWindowShouldClose(window))
