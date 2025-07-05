@@ -1,10 +1,8 @@
-#include <cstdlib> //C standard lib, handy
-#include "glad/glad.h"
+#include <cstdlib> #include "glad/glad.h"
 #include "GLFW/glfw3.h"
 #include "functions.h"
 #include <iostream>
 
-//GLSL stuff
 const char* vertex_shader_source =    "#version 460 core\n"
                                       "layout (location = 0) in vec3 a_pos;\n"
                                       "void main()\n"
@@ -21,35 +19,28 @@ const char*  fragment_shader_source = "#version 460 core\n"
 int main()
 {
     
-    //window instantiation
-    glfwInit();
+        glfwInit();
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
-    //window object
-    GLFWwindow* window = glfwCreateWindow(800, 600, "success" , NULL, NULL);
+        GLFWwindow* window = glfwCreateWindow(800, 600, "success" , NULL, NULL);
     if (window == NULL)
     {
         glfwTerminate();
         return EXIT_FAILURE;
     }
 
-    //tell OpenGL this is where you're working, slave
-    glfwMakeContextCurrent(window);
+        glfwMakeContextCurrent(window);
 
-    //loads OpenGL function pointers (bridges GLFW and OpenGL)
-    if(!gladLoadGL())
+        if(!gladLoadGL())
         return EXIT_FAILURE;
 
-    //OpenGL playground
-    glViewport(0, 0, 800, 600);
+        glViewport(0, 0, 800, 600);
 
-    //resize callback function call
-    glfwSetFramebufferSizeCallback(window, &framebuffer_size_callback);
+        glfwSetFramebufferSizeCallback(window, &framebuffer_size_callback);
 
-    //NDC, normalized device coordinates 
-    float vertices[]
+        float vertices[]
     {
         -0.2f,  0.0f, 0.0f,
          0.0f,  0.8f, 0.0f,
@@ -57,8 +48,7 @@ int main()
 
     };
 
-    //first step of the graphics pipeline
-
+    
     unsigned int vertex_shader;
     vertex_shader = glCreateShader(GL_VERTEX_SHADER);
 
@@ -74,8 +64,7 @@ int main()
         std::cout << "ERROR::SHADER::FRAGMENT::COMPILATION_FAILED\n" << infolog << std::endl;
     }
 
-    //second step of the graphics pipeline
-
+    
     unsigned int fragment_shader;
     fragment_shader = glCreateShader(GL_FRAGMENT_SHADER);
     glShaderSource(fragment_shader, 1, &fragment_shader_source, NULL);
@@ -89,8 +78,7 @@ int main()
     }
 
 
-    //third step of the graphics pipeline
-
+    
     unsigned int shader_program;
     shader_program = glCreateProgram();
 
@@ -107,14 +95,10 @@ int main()
         std::cout << "ERROR::SHADER::PROGRAM::COMPILATION_FAILED\n" << infolog << std::endl;
     }
 
-    //VAO is vertex array object
-    //used to store VBO layout without having to rebind all the time
-    unsigned int VAO;
+            unsigned int VAO;
     glGenVertexArrays(1, &VAO);
 
-    //VBO is vertex buffer object
-    //this is used for one attribute, i.e. color, position, orientation, etc...
-    unsigned int VBO;
+            unsigned int VBO;
     glGenBuffers(1, &VBO);
 
     glBindVertexArray(VAO);
@@ -122,24 +106,19 @@ int main()
     glBindBuffer(GL_ARRAY_BUFFER, VBO);
     glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
 
-    //array of verticies traversal
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0); 
+        glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0); 
     glEnableVertexAttribArray(0);
 
-    //don't change pipeline state often
-    glClearColor(0.5f, 0.0f, 0.5f, 1.0f);
+        glClearColor(0.5f, 0.0f, 0.5f, 1.0f);
     glBindVertexArray(VAO);
     glUseProgram(shader_program);
-    //render loop
-    while(!glfwWindowShouldClose(window))
+        while(!glfwWindowShouldClose(window))
     {
         process_input(window);
 
-        //background color
-        glClear(GL_COLOR_BUFFER_BIT);
+                glClear(GL_COLOR_BUFFER_BIT);
 
-        //triangle
-        glDrawArrays(GL_TRIANGLES, 0, 3);
+                glDrawArrays(GL_TRIANGLES, 0, 3);
 
         glfwSwapBuffers(window);
         glfwPollEvents();
