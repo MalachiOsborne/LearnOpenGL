@@ -126,26 +126,25 @@ int main()
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0); 
     glEnableVertexAttribArray(0);
 
+    //don't change pipeline state often
+    glClearColor(0.5f, 0.0f, 0.5f, 1.0f);
+    glBindVertexArray(VAO);
+    glUseProgram(shader_program);
     //render loop
     while(!glfwWindowShouldClose(window))
     {
         process_input(window);
 
         //background color
-        glClearColor(0.5f, 0.0f, 0.5f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT);
 
         //triangle
-        glUseProgram(shader_program);
-        glBindVertexArray(VAO);
         glDrawArrays(GL_TRIANGLES, 0, 3);
 
         glfwSwapBuffers(window);
         glfwPollEvents();
     }
 
-    //self explanatory
     glfwTerminate();
-
     return 0;
 }
