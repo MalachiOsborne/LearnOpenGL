@@ -10,14 +10,14 @@ const char* vertex_shader_source =    "#version 460 core\n"
                                       "void main()\n"
                                       "{\n"
                                       "    gl_Position = vec4(a_pos.x, a_pos.y, a_pos.z, 1.0f);\n"
-                                      "}\0";
+                                      "}";
 
 const char*  fragment_shader_source = "#version 460 core\n"
                                       "out vec4 frag_color;\n"
                                       "void main()\n"
                                       "{\n"
                                       "  frag_color = vec4(1.0f, 1.0f, 0.0f, 1.0f);\n"
-                                      "}\0";
+                                      "}";
 int main()
 {
     
