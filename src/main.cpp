@@ -3,21 +3,36 @@
 #include "GLFW/glfw3.h"
 #include "functions.h"
 #include <iostream>
+#include <math.h>
 
 //GLSL stuff
-const char* vertex_shader_source =    "#version 460 core\n"
+static const char* vertex_shader_source =    "#version 460 core\n"
                                       "layout (location = 0) in vec3 a_pos;\n"
+                                      "layout (location = 1) in vec3 a_color;\n"
+                                      "out vec3 our_color;\n"
                                       "void main()\n"
                                       "{\n"
+<<<<<<< HEAD
                                       "    gl_Position = vec4(a_pos.x, a_pos.y, a_pos.z, 1.0f);\n"
                                       "}";
+=======
+                                      "    gl_Position = vec4(a_pos, 1.0f);\n"
+                                      "    our_color = a_color;\n"
+                                      "}\0";
+>>>>>>> 25a7bc1 (add own shader class and make colourful triangle)
 
-const char*  fragment_shader_source = "#version 460 core\n"
+static const char*  fragment_shader_source = "#version 460 core\n"
                                       "out vec4 frag_color;\n"
+                                      "in vec3 our_color;\n"
                                       "void main()\n"
                                       "{\n"
+<<<<<<< HEAD
                                       "  frag_color = vec4(1.0f, 1.0f, 0.0f, 1.0f);\n"
                                       "}";
+=======
+                                      "  frag_color = vec4(our_color, 1.0f);\n"
+                                      "}\0";
+>>>>>>> 25a7bc1 (add own shader class and make colourful triangle)
 int main()
 {
     
@@ -43,19 +58,25 @@ int main()
         return EXIT_FAILURE;
 
     //OpenGL playground
-    glViewport(0, 0, 800, 600);
+    glViewport(0, 0, 1040, 800);
 
     //resize callback function call
     glfwSetFramebufferSizeCallback(window, &framebuffer_size_callback);
 
+//    int num_attributes;
+//    glGetIntegerv(GL_MAX_VERTEX_ATTRIBS, &num_attributes);
+//    std::cout << "Maximum num of vertex attributes supported: " << num_attributes << std::endl;
+
     //NDC, normalized device coordinates 
     float vertices[]
     {
-        -0.2f,  0.0f, 0.0f,
-         0.0f,  0.8f, 0.0f,
-         0.3f, -0.4f, 0.0f
+        //position              //color
+        -0.6f, -0.5f, 0.0f,     1.0f, 0.0f, 0.0f,
+         0.0f,  0.7f, 0.0f,     0.0f, 1.0f, 0.0f, 
+         0.6f, -0.5f, 0.0f,     0.0f, 0.0f, 1.0f
 
     };
+
 
     //first step of the graphics pipeline
 
@@ -122,14 +143,22 @@ int main()
     glBindBuffer(GL_ARRAY_BUFFER, VBO);
     glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
 
-    //array of verticies traversal
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0); 
+    //position traversal
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)0); 
     glEnableVertexAttribArray(0);
 
+<<<<<<< HEAD
     //don't change pipeline state often
     glClearColor(0.5f, 0.0f, 0.5f, 1.0f);
     glBindVertexArray(VAO);
     glUseProgram(shader_program);
+=======
+    //color traversal
+    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)(3 * sizeof(float)));
+    glEnableVertexAttribArray(1);
+
+
+>>>>>>> 25a7bc1 (add own shader class and make colourful triangle)
     //render loop
     while(!glfwWindowShouldClose(window))
     {
@@ -138,7 +167,20 @@ int main()
         //background color
         glClear(GL_COLOR_BUFFER_BIT);
 
+<<<<<<< HEAD
         //triangle
+=======
+        glUseProgram(shader_program);
+        
+        //color changing
+        float time_value = glfwGetTime();
+        float green_value = (sin(time_value)/2.0f)+0.5f;
+        int vertex_color_location = glGetUniformLocation(shader_program, "our_color");
+        glUniform4f(vertex_color_location, 0.0f, green_value, 0.0f, 1.0f);
+
+        //render triangle
+        glBindVertexArray(VAO);
+>>>>>>> 25a7bc1 (add own shader class and make colourful triangle)
         glDrawArrays(GL_TRIANGLES, 0, 3);
 
         glfwSwapBuffers(window);
