@@ -12,17 +12,33 @@ static const char* vertex_shader_source =    "#version 460 core\n"
                                       "out vec3 our_color;\n"
                                       "void main()\n"
                                       "{\n"
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+                                      "    gl_Position = vec4(a_pos.x, a_pos.y, a_pos.z, 1.0f);\n"
+                                      "}";
+=======
+>>>>>>> c2d3d11abd8d178c2fc65e773f37fb5adc4bcc7b
                                       "    gl_Position = vec4(a_pos, 1.0f);\n"
                                       "    our_color = a_color;\n"
                                       "}\0";
+>>>>>>> 25a7bc1 (add own shader class and make colourful triangle)
 
 static const char*  fragment_shader_source = "#version 460 core\n"
                                       "out vec4 frag_color;\n"
                                       "in vec3 our_color;\n"
                                       "void main()\n"
                                       "{\n"
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+                                      "  frag_color = vec4(1.0f, 1.0f, 0.0f, 1.0f);\n"
+                                      "}";
+=======
+>>>>>>> c2d3d11abd8d178c2fc65e773f37fb5adc4bcc7b
                                       "  frag_color = vec4(our_color, 1.0f);\n"
                                       "}\0";
+>>>>>>> 25a7bc1 (add own shader class and make colourful triangle)
 int main()
 {
     
@@ -137,20 +153,38 @@ int main()
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)0); 
     glEnableVertexAttribArray(0);
 
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+    //don't change pipeline state often
+    glClearColor(0.5f, 0.0f, 0.5f, 1.0f);
+    glBindVertexArray(VAO);
+    glUseProgram(shader_program);
+=======
+>>>>>>> c2d3d11abd8d178c2fc65e773f37fb5adc4bcc7b
     //color traversal
     glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)(3 * sizeof(float)));
     glEnableVertexAttribArray(1);
 
 
+<<<<<<< HEAD
+=======
+>>>>>>> 25a7bc1 (add own shader class and make colourful triangle)
+>>>>>>> c2d3d11abd8d178c2fc65e773f37fb5adc4bcc7b
     //render loop
     while(!glfwWindowShouldClose(window))
     {
         process_input(window);
 
         //background color
-        glClearColor(0.5f, 0.0f, 0.5f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT);
 
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+        //triangle
+=======
+>>>>>>> c2d3d11abd8d178c2fc65e773f37fb5adc4bcc7b
         glUseProgram(shader_program);
         
         //color changing
@@ -161,14 +195,13 @@ int main()
 
         //render triangle
         glBindVertexArray(VAO);
+>>>>>>> 25a7bc1 (add own shader class and make colourful triangle)
         glDrawArrays(GL_TRIANGLES, 0, 3);
 
         glfwSwapBuffers(window);
         glfwPollEvents();
     }
 
-    //self explanatory
     glfwTerminate();
-
     return 0;
 }
