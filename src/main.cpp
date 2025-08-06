@@ -1,28 +1,12 @@
 #include <cstdlib> //C standard lib, handy
 #include "glad/glad.h"
+#include "shaders.h"
 #include "GLFW/glfw3.h"
 #include "functions.h"
 #include <iostream>
 #include <math.h>
 
-//GLSL stuff
-static const char* vertex_shader_source =    "#version 460 core\n"
-                                      "layout (location = 0) in vec3 a_pos;\n"
-                                      "layout (location = 1) in vec3 a_color;\n"
-                                      "out vec3 our_color;\n"
-                                      "void main()\n"
-                                      "{\n"
-                                      "    gl_Position = vec4(a_pos, 1.0f);\n"
-                                      "    our_color = a_color;\n"
-                                      "}\0";
 
-static const char*  fragment_shader_source = "#version 460 core\n"
-                                      "out vec4 frag_color;\n"
-                                      "in vec3 our_color;\n"
-                                      "void main()\n"
-                                      "{\n"
-                                      "  frag_color = vec4(our_color, 1.0f);\n"
-                                      "}\0";
 int main()
 {
     
@@ -47,16 +31,12 @@ int main()
     if(!gladLoadGL())
         return EXIT_FAILURE;
 
-    //OpenGL playground
-    glViewport(0, 0, 1040, 800);
-
     //resize callback function call
-    glfwSetFramebufferSizeCallback(window, &framebuffer_size_callback);
 
 //    int num_attributes;
 //    glGetIntegerv(GL_MAX_VERTEX_ATTRIBS, &num_attributes);
 //    std::cout << "Maximum num of vertex attributes supported: " << num_attributes << std::endl;
-
+    shader my_shader("vertex_shader.vs", "fragment_shader.fs");
     //NDC, normalized device coordinates 
     float vertices[]
     {
@@ -66,57 +46,6 @@ int main()
          0.6f, -0.5f, 0.0f,     0.0f, 0.0f, 1.0f
 
     };
-
-
-    //first step of the graphics pipeline
-
-    unsigned int vertex_shader;
-    vertex_shader = glCreateShader(GL_VERTEX_SHADER);
-
-    glShaderSource(vertex_shader, 1, &vertex_shader_source, NULL);
-    glCompileShader(vertex_shader);
-
-    int success;
-    char infolog[512];
-    glGetShaderiv(vertex_shader, GL_COMPILE_STATUS, &success);
-    if(!success)
-    {
-        glGetShaderInfoLog(vertex_shader, 512, NULL, infolog);
-        std::cout << "ERROR::SHADER::FRAGMENT::COMPILATION_FAILED\n" << infolog << std::endl;
-    }
-
-    //second step of the graphics pipeline
-
-    unsigned int fragment_shader;
-    fragment_shader = glCreateShader(GL_FRAGMENT_SHADER);
-    glShaderSource(fragment_shader, 1, &fragment_shader_source, NULL);
-    glCompileShader(fragment_shader);
-
-    glGetShaderiv(fragment_shader, GL_COMPILE_STATUS, &success);
-    if(!success)
-    {
-        glGetShaderInfoLog(fragment_shader, 512, NULL, infolog);
-        std::cout << "ERROR::SHADER::FRAGMENT::COMPILATION_FAILED\n" << infolog << std::endl;
-    }
-
-
-    //third step of the graphics pipeline
-
-    unsigned int shader_program;
-    shader_program = glCreateProgram();
-
-    glAttachShader(shader_program, vertex_shader);
-    glAttachShader(shader_program, fragment_shader);
-    glLinkProgram(shader_program);
-    glDeleteShader(vertex_shader);
-    glDeleteShader(fragment_shader);
-
-    glGetProgramiv(shader_program, GL_LINK_STATUS, &success);
-    if (!success)
-    {
-        glGetProgramInfoLog(shader_program, 512, NULL, infolog);
-        std::cout << "ERROR::SHADER::PROGRAM::COMPILATION_FAILED\n" << infolog << std::endl;
-    }
 
     //VAO is vertex array object
     //used to store VBO layout without having to rebind all the time
@@ -151,15 +80,9 @@ int main()
         glClearColor(0.5f, 0.0f, 0.5f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT);
 
-        glUseProgram(shader_program);
-        
-        //color changing
-        float time_value = glfwGetTime();
-        float green_value = (sin(time_value)/2.0f)+0.5f;
-        int vertex_color_location = glGetUniformLocation(shader_program, "our_color");
-        glUniform4f(vertex_color_location, 0.0f, green_value, 0.0f, 1.0f);
 
         //render triangle
+        my_shader.use();
         glBindVertexArray(VAO);
         glDrawArrays(GL_TRIANGLES, 0, 3);
 
@@ -167,8 +90,23 @@ int main()
         glfwPollEvents();
     }
 
+    glDeleteVertexArrays(1, &VAO);
+    glDeleteBuffers(1, &VBO);
+
     //self explanatory
     glfwTerminate();
 
     return 0;
+}
+
+void process_input(GLFWwindow* window)
+{
+    if(glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
+        glfwSetWindowShouldClose(window, true);
+}
+
+//GLFWwindow* doens't need a name because we're not using it, we can put "window" in there but the lsp will complain that its an unused variable
+void framebuffer_size_callback(GLFWwindow*, int width, int height)
+{
+    glViewport(0, 0, width, height);
 }
