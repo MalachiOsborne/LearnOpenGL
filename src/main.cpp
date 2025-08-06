@@ -6,44 +6,6 @@
 #include <iostream>
 #include <math.h>
 
-<<<<<<< HEAD
-
-=======
-//GLSL stuff
-static const char* vertex_shader_source =    "#version 460 core\n"
-                                      "layout (location = 0) in vec3 a_pos;\n"
-                                      "layout (location = 1) in vec3 a_color;\n"
-                                      "out vec3 our_color;\n"
-                                      "void main()\n"
-                                      "{\n"
-<<<<<<< HEAD
-=======
-<<<<<<< HEAD
-                                      "    gl_Position = vec4(a_pos.x, a_pos.y, a_pos.z, 1.0f);\n"
-                                      "}";
-=======
->>>>>>> c2d3d11abd8d178c2fc65e773f37fb5adc4bcc7b
-                                      "    gl_Position = vec4(a_pos, 1.0f);\n"
-                                      "    our_color = a_color;\n"
-                                      "}\0";
->>>>>>> 25a7bc1 (add own shader class and make colourful triangle)
-
-static const char*  fragment_shader_source = "#version 460 core\n"
-                                      "out vec4 frag_color;\n"
-                                      "in vec3 our_color;\n"
-                                      "void main()\n"
-                                      "{\n"
-<<<<<<< HEAD
-=======
-<<<<<<< HEAD
-                                      "  frag_color = vec4(1.0f, 1.0f, 0.0f, 1.0f);\n"
-                                      "}";
-=======
->>>>>>> c2d3d11abd8d178c2fc65e773f37fb5adc4bcc7b
-                                      "  frag_color = vec4(our_color, 1.0f);\n"
-                                      "}\0";
->>>>>>> 25a7bc1 (add own shader class and make colourful triangle)
->>>>>>> b8d1f20fa2bfbbb207dda89ac5ec09d03584d6f3
 int main()
 {
     
@@ -73,7 +35,7 @@ int main()
 //    int num_attributes;
 //    glGetIntegerv(GL_MAX_VERTEX_ATTRIBS, &num_attributes);
 //    std::cout << "Maximum num of vertex attributes supported: " << num_attributes << std::endl;
-    shader my_shader("vertex_shader.vs", "fragment_shader.fs");
+    shader my_shader("src/vertex_shader.vs", "src/fragment_shader.fs");
     //NDC, normalized device coordinates 
     float vertices[]
     {
@@ -103,66 +65,38 @@ int main()
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)0); 
     glEnableVertexAttribArray(0);
 
-<<<<<<< HEAD
-=======
-<<<<<<< HEAD
     //don't change pipeline state often
     glClearColor(0.5f, 0.0f, 0.5f, 1.0f);
     glBindVertexArray(VAO);
-    glUseProgram(shader_program);
-=======
->>>>>>> c2d3d11abd8d178c2fc65e773f37fb5adc4bcc7b
+
     //color traversal
     glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)(3 * sizeof(float)));
     glEnableVertexAttribArray(1);
 
 
-<<<<<<< HEAD
-=======
->>>>>>> 25a7bc1 (add own shader class and make colourful triangle)
->>>>>>> c2d3d11abd8d178c2fc65e773f37fb5adc4bcc7b
     //render loop
     while(!glfwWindowShouldClose(window))
     {
         process_input(window);
 
         //background color
+        glClearColor(1.0f, 1.0f, 0.0f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT);
 
-<<<<<<< HEAD
-=======
-<<<<<<< HEAD
-=======
-<<<<<<< HEAD
-        //triangle
-=======
->>>>>>> c2d3d11abd8d178c2fc65e773f37fb5adc4bcc7b
-        glUseProgram(shader_program);
-        
-        //color changing
-        float time_value = glfwGetTime();
-        float green_value = (sin(time_value)/2.0f)+0.5f;
-        int vertex_color_location = glGetUniformLocation(shader_program, "our_color");
-        glUniform4f(vertex_color_location, 0.0f, green_value, 0.0f, 1.0f);
->>>>>>> b8d1f20fa2bfbbb207dda89ac5ec09d03584d6f3
 
         //render triangle
         my_shader.use();
         glBindVertexArray(VAO);
->>>>>>> 25a7bc1 (add own shader class and make colourful triangle)
         glDrawArrays(GL_TRIANGLES, 0, 3);
 
         glfwSwapBuffers(window);
         glfwPollEvents();
     }
 
-<<<<<<< HEAD
     glDeleteVertexArrays(1, &VAO);
     glDeleteBuffers(1, &VBO);
 
     //self explanatory
-=======
->>>>>>> b8d1f20fa2bfbbb207dda89ac5ec09d03584d6f3
     glfwTerminate();
     return 0;
 }
